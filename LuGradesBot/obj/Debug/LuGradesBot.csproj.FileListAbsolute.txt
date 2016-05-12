@@ -1,0 +1,14 @@
+C:\Users\abo\Documents\MyProjects\LuGradesBot\LuGradesBot\bin\Debug\LuGradesBot.exe.config
+C:\Users\abo\Documents\MyProjects\LuGradesBot\LuGradesBot\bin\Debug\LuGradesBot.exe
+C:\Users\abo\Documents\MyProjects\LuGradesBot\LuGradesBot\bin\Debug\LuGradesBot.pdb
+C:\Users\abo\Documents\MyProjects\LuGradesBot\LuGradesBot\obj\Debug\LuGradesBot.csprojResolveAssemblyReference.cache
+C:\Users\abo\Documents\MyProjects\LuGradesBot\LuGradesBot\obj\Debug\LuGradesBot.exe
+C:\Users\abo\Documents\MyProjects\LuGradesBot\LuGradesBot\obj\Debug\LuGradesBot.pdb
+C:\Users\abo\Documents\MyProjects\LuGradesBot\LuGradesBot\bin\Debug\Selenium.WebDriverBackedSelenium.dll
+C:\Users\abo\Documents\MyProjects\LuGradesBot\LuGradesBot\bin\Debug\ThoughtWorks.Selenium.Core.dll
+C:\Users\abo\Documents\MyProjects\LuGradesBot\LuGradesBot\bin\Debug\WebDriver.dll
+C:\Users\abo\Documents\MyProjects\LuGradesBot\LuGradesBot\bin\Debug\WebDriver.Support.dll
+C:\Users\abo\Documents\MyProjects\LuGradesBot\LuGradesBot\bin\Debug\Selenium.WebDriverBackedSelenium.xml
+C:\Users\abo\Documents\MyProjects\LuGradesBot\LuGradesBot\bin\Debug\ThoughtWorks.Selenium.Core.xml
+C:\Users\abo\Documents\MyProjects\LuGradesBot\LuGradesBot\bin\Debug\WebDriver.xml
+C:\Users\abo\Documents\MyProjects\LuGradesBot\LuGradesBot\bin\Debug\WebDriver.Support.xml
