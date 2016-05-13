@@ -51,8 +51,17 @@ namespace LuGradesBot
 		}
 		public void StartPage(IWebDriver driver)
 		{
+			try
+			{
 				Console.WriteLine("Connecting...\n");
 				driver.Navigate().GoToUrl("http://ulfg.ul.edu.lb/login.aspx");
+			}
+			catch (WebDriverException e)
+			{
+				Console.WriteLine(e.Message);
+				Console.WriteLine("\nCheck your connection. Retrying..\n");
+				StartPage(driver);
+			}
 
 			while (!CheckUrl(driver,Globals.StartUrl))
 			{				
@@ -64,8 +73,8 @@ namespace LuGradesBot
 				catch(WebDriverException e) 
 				{
 					Console.WriteLine(e.Message);
-					Console.WriteLine("\nRefreshing..\n");
-					driver.Navigate().Refresh();
+					Console.WriteLine("\nCheck your connection Retrying..\n");
+					StartPage(driver);
 				}
 			}
 			Console.WriteLine("Connected :)");
@@ -98,7 +107,16 @@ namespace LuGradesBot
 			}
 			while (!CheckUrl(driver, Globals.AccountUrl))
 			{
-				driver.Navigate().GoToUrl("http://ulfg.ul.edu.lb/account/gradeuser1.aspx");
+				try
+				{
+					driver.Navigate().GoToUrl("http://ulfg.ul.edu.lb/account/gradeuser1.aspx");
+				}
+				catch (WebDriverException e)
+				{
+					Console.WriteLine(e.ToString());
+					Console.WriteLine("\nReconnecting");
+					SubmitForm(driver);
+				}
 			}
 			Console.WriteLine("\nLogged in Successfully");
 		}
