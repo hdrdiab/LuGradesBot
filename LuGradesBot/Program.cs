@@ -1,34 +1,40 @@
-﻿using System;
-using System.Windows;
-using System.IO;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
-using System.Collections.Specialized;
-using OpenQA.Selenium;
-
-
-
-using OpenQA.Selenium.Support.UI;
+﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
+using System;
 
 namespace LuGradesBot
 {
-	class Program
+	internal class Program
 	{
-		static void Main(string[] args)
+		private static void Main(string[] args)
 		{
-			//using(IWebDriver driver = new ChromeDriver(@"C:\Program Files (x86)\chromedriver_win32"))
+			//using (IWebDriver driver = new ChromeDriver(@"C:\Program Files (x86)\chromedriver_win32"))
 			//{
 			//	driver.Navigate().GoToUrl("http://ulfg.ul.edu.lb/login.aspx");
-			//	IWebElement element = driver.FindElement(By.Id("form1"));
-			//	Console.WriteLine(element.TagName);
-			//	Console.ReadKey();
+			//	Console.WriteLine("Username:");
+			//	string uname = Console.ReadLine();
+			//	Console.WriteLine("/n Password:");
+			//	string pass = Console.ReadLine();
+			//	try
+			//	{
+			//		IWebElement username = driver.FindElement(By.Id("maincontent_tbUser"));
+			//		IWebElement password = driver.FindElement(By.Id("maincontent_tbPassword"));
+			//		username.SendKeys(uname);
+			//		password.SendKeys(pass);
+			//		driver.FindElement(By.Id("maincontent_Button1")).Click();
+			//		if (String.Compare(driver.Url.ToString(), "ulfg.ul.edu.lb/evaluation/formcgeneral.aspx") < 0)
+			//		{
+			//			driver.Navigate().GoToUrl("http://ulfg.ul.edu.lb/account/gradeuser1.aspx");
+			//		}
+			//	}
+			//	catch (TimeoutException e)
+			//	{
+			//		Console.WriteLine(e.ToString());
+			//	}
 
-			}
-		}		
+			//	Console.ReadKey();
+			//	driver.Quit();
+			//}
+		}
 	}
 }
