@@ -12,3 +12,7 @@ C:\Users\abo\Documents\MyProjects\LuGradesBot\LuGradesBot\bin\Debug\Selenium.Web
 C:\Users\abo\Documents\MyProjects\LuGradesBot\LuGradesBot\bin\Debug\ThoughtWorks.Selenium.Core.xml
 C:\Users\abo\Documents\MyProjects\LuGradesBot\LuGradesBot\bin\Debug\WebDriver.xml
 C:\Users\abo\Documents\MyProjects\LuGradesBot\LuGradesBot\bin\Debug\WebDriver.Support.xml
+C:\Users\abo\Documents\MyProjects\LuGradesBot\LuGradesBot\bin\Debug\LuGradesBot.exe.manifest
+C:\Users\abo\Documents\MyProjects\LuGradesBot\LuGradesBot\bin\Debug\LuGradesBot.application
+C:\Users\abo\Documents\MyProjects\LuGradesBot\LuGradesBot\obj\Debug\LuGradesBot.exe.manifest
+C:\Users\abo\Documents\MyProjects\LuGradesBot\LuGradesBot\obj\Debug\LuGradesBot.application
