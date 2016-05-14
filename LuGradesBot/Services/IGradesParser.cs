@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
 
 namespace LuGradesBot.Services
 {
@@ -14,5 +15,6 @@ namespace LuGradesBot.Services
 		void SelectYear(IWebDriver driver);
 		void SelectSeason(IWebDriver driver);
 		void GetGrades(IWebDriver driver);
+		void RefreshPage(object sender, ElapsedEventArgs e, IWebDriver driver);
 	}
 }

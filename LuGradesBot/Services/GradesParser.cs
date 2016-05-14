@@ -5,12 +5,17 @@ using System.Text;
 using System.Threading.Tasks;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
+using System.Timers;
 
 namespace LuGradesBot.Services
 {
 	class GradesParser : IGradesParser
 	{
-		ILogin login;
+		ILogin _login;
+		public GradesParser(ILogin login)
+		{
+			_login = login;
+		}
 		public string GetSeason()
 		{
 			Console.WriteLine("\nEnter the season (spring or fall):");
@@ -27,7 +32,7 @@ namespace LuGradesBot.Services
 
 		public void SelectYear(IWebDriver driver)
 		{
-			if (login.CheckUrl(driver, Globals.AccountUrl))
+			if (_login.CheckUrl(driver, Globals.AccountUrl))
 			{
 				string _year = GetYear();
 				int i = 0;
@@ -55,12 +60,13 @@ namespace LuGradesBot.Services
 			{
 				Console.WriteLine("Refreshing..");
 				driver.Navigate().Refresh();
+				 SelectYear(driver);
 			}
 		}
 
 		public void SelectSeason(IWebDriver driver)
 		{
-			if (login.CheckUrl(driver, Globals.AccountUrl))
+			if (_login.CheckUrl(driver, Globals.AccountUrl))
 			{
 				string _season = GetSeason();
 				int i = 0;
@@ -88,28 +94,57 @@ namespace LuGradesBot.Services
 			{
 				Console.WriteLine("Refreshing..");
 				driver.Navigate().Refresh();
+				SelectSeason(driver);
 			}
+			
 		}
 
 		public void GetGrades(IWebDriver driver)
 		{
-			if (login.CheckUrl(driver, Globals.AccountUrl))
+			if (_login.CheckUrl(driver, Globals.AccountUrl))
 			{
-				int i;
-				IWebElement table = driver.FindElement(By.Id("maincontent_GridView1"));
-				IList<IWebElement> trows = table.FindElements(By.TagName("span"));
-				Console.WriteLine("\n");
-				for (i = 3; i < trows.Count; i++)
+				try
 				{
-					if (trows[i].Text != trows[i - 1].Text)
-						Console.WriteLine(trows[i].Text);
+					int i;
+					IWebElement table = driver.FindElement(By.Id("maincontent_GridView1"));
+					IList<IWebElement> trows = table.FindElements(By.TagName("span"));
+					Console.WriteLine("\n");
+					for (i = 3; i < trows.Count; i++)
+					{
+						if (trows[i].Text != trows[i - 1].Text)
+							Console.WriteLine(trows[i].Text);
+					}
+					Console.WriteLine("---------------------------");
 				}
+				catch { }				
 			}
 			else
 			{
 				Console.WriteLine("Refreshing..");
 				driver.Navigate().Refresh();
+				GetGrades(driver);
 			}
+		}
+
+		public void RefreshPage(object sender, ElapsedEventArgs e, IWebDriver driver)
+		{
+			try
+			{				
+				driver.Navigate().Refresh();
+			}
+			catch
+			{
+			}
+			try
+			{
+				IAlert alert = driver.SwitchTo().Alert();
+				alert.Accept();
+			}
+			catch
+			{
+			}
+
+			GetGrades(driver);
 		}
 	}
 }
