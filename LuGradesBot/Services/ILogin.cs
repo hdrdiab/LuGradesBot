@@ -1,18 +1,15 @@
 ﻿using OpenQA.Selenium;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LuGradesBot.Services
 {
-	interface ILogin
+	internal interface ILogin
 	{
 		bool CheckUrl(IWebDriver driver, string url);
-		string ReadPassword();
-		void StartPage(IWebDriver driver);
-		void SubmitForm(IWebDriver driver);
 
+		string ReadPassword();
+
+		void StartPage(IWebDriver driver);
+
+		void SubmitForm(IWebDriver driver);
 	}
 }

@@ -1,9 +1,7 @@
 ﻿using LuGradesBot.Services;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Firefox;
 using System;
-using System.Drawing;
 using System.Timers;
 
 namespace LuGradesBot
@@ -11,6 +9,7 @@ namespace LuGradesBot
 	internal class Program
 	{
 		private static Timer aTimer;
+
 		private static void Main(string[] args)
 		{
 			FirefoxProfile profile = new FirefoxProfile();
@@ -26,7 +25,7 @@ namespace LuGradesBot
 				parser.GetGrades(driver);
 				aTimer = new Timer(60000);
 				Console.WriteLine("\n Page will refresh every 1 minute,Press Any Key to stop and exit:");
-				aTimer.Elapsed += (sender, e) => parser.RefreshPage(sender, e,driver);
+				aTimer.Elapsed += (sender, e) => parser.RefreshPage(sender, e, driver);
 				aTimer.Enabled = true;
 				Console.ReadKey();
 				driver.Quit();

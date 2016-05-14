@@ -1,21 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using OpenQA.Selenium;
+﻿using OpenQA.Selenium;
 using OpenQA.Selenium.Support.UI;
+using System;
+using System.Collections.Generic;
 using System.Timers;
 
 namespace LuGradesBot.Services
 {
-	class GradesParser : IGradesParser
+	internal class GradesParser : IGradesParser
 	{
-		ILogin _login;
+		private ILogin _login;
+
 		public GradesParser(ILogin login)
 		{
 			_login = login;
 		}
+
 		public string GetSeason()
 		{
 			Console.WriteLine("\nEnter the season (spring or fall):");
@@ -60,7 +59,7 @@ namespace LuGradesBot.Services
 			{
 				Console.WriteLine("Refreshing..");
 				driver.Navigate().Refresh();
-				 SelectYear(driver);
+				SelectYear(driver);
 			}
 		}
 
@@ -96,7 +95,6 @@ namespace LuGradesBot.Services
 				driver.Navigate().Refresh();
 				SelectSeason(driver);
 			}
-			
 		}
 
 		public void GetGrades(IWebDriver driver)
@@ -116,7 +114,7 @@ namespace LuGradesBot.Services
 					}
 					Console.WriteLine("---------------------------");
 				}
-				catch { }				
+				catch { }
 			}
 			else
 			{
@@ -129,7 +127,7 @@ namespace LuGradesBot.Services
 		public void RefreshPage(object sender, ElapsedEventArgs e, IWebDriver driver)
 		{
 			try
-			{				
+			{
 				driver.Navigate().Refresh();
 			}
 			catch

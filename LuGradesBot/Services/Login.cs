@@ -1,12 +1,11 @@
 ﻿using LuGradesBot.Services;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Support.UI;
 using System;
+
 namespace LuGradesBot
 {
 	internal class Login : ILogin
 	{
-
 		public bool CheckUrl(IWebDriver driver, string url)
 		{
 			try
@@ -17,12 +16,13 @@ namespace LuGradesBot
 				else
 					return false;
 			}
-			catch(WebDriverException e)
+			catch (WebDriverException e)
 			{
 				Console.WriteLine(e.Message);
 				return false;
 			}
 		}
+
 		public string ReadPassword()
 		{
 			string pass = "";
@@ -49,6 +49,7 @@ namespace LuGradesBot
 			while (key.Key != ConsoleKey.Enter);
 			return pass;
 		}
+
 		public void StartPage(IWebDriver driver)
 		{
 			try
@@ -62,14 +63,14 @@ namespace LuGradesBot
 				Console.WriteLine("\nCheck your connection. Retrying..\n");
 			}
 
-			while (!CheckUrl(driver,Globals.StartUrl))
-			{				
+			while (!CheckUrl(driver, Globals.StartUrl))
+			{
 				try
 				{
 					Console.WriteLine("Refreshing...\n");
 					driver.Navigate().Refresh();
 				}
-				catch(WebDriverException e) 
+				catch (WebDriverException e)
 				{
 					Console.WriteLine(e.Message);
 					Console.WriteLine("\nCheck your connection Retrying..\n");
@@ -116,7 +117,7 @@ namespace LuGradesBot
 					SubmitForm(driver);
 				}
 			}
-			Console.WriteLine("\n"+driver.FindElement(By.Id("logincontent_ucLogin1_Label1")).Text+" Logged in successfuly");
+			Console.WriteLine("\n" + driver.FindElement(By.Id("logincontent_ucLogin1_Label1")).Text + " Logged in successfuly");
 		}
 	}
 }
