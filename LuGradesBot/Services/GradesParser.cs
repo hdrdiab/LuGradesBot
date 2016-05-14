@@ -10,8 +10,7 @@ namespace LuGradesBot.Services
 {
 	class GradesParser : IGradesParser
 	{
-		Login login;
-
+		ILogin login;
 		public string GetSeason()
 		{
 			Console.WriteLine("\nEnter the season (spring or fall):");
@@ -21,68 +20,95 @@ namespace LuGradesBot.Services
 
 		public string GetYear()
 		{
-			Console.WriteLine("\nEnter the academic year of the form yyyy-yyyy:");
+			Console.WriteLine("\nEnter the academic year (yyyy-yyyy):");
 			string year = Console.ReadLine();
 			return year;
 		}
 
 		public void SelectYear(IWebDriver driver)
 		{
-			string _year = GetYear();
-			int i = 0;
-			SelectElement select = new SelectElement(driver.FindElement(By.Id("maincontent_academicdrop")));
-			var options = select.Options;
-			while (i == 0)
+			if (login.CheckUrl(driver, Globals.AccountUrl))
 			{
-				foreach (IWebElement option in options)
+				string _year = GetYear();
+				int i = 0;
+				SelectElement select = new SelectElement(driver.FindElement(By.Id("maincontent_academicdrop")));
+				var options = select.Options;
+				while (i == 0)
 				{
-					if (_year == option.Text)
+					foreach (IWebElement option in options)
 					{
-						i++;
-						break;
+						if (_year == option.Text)
+						{
+							i++;
+							break;
+						}
+					}
+					if (i == 0)
+					{
+						Console.WriteLine("\nNot Found");
+						_year = GetYear();
 					}
 				}
-				if(i == 0)
-				{
-					Console.WriteLine("\nNot Found");
-					_year=GetYear();
-				}
+				select.SelectByText(_year);
 			}
-			select.SelectByText(_year);
+			else
+			{
+				Console.WriteLine("Refreshing..");
+				driver.Navigate().Refresh();
+			}
 		}
 
 		public void SelectSeason(IWebDriver driver)
 		{
-			string _season = GetSeason();
-			int i = 0;
-			SelectElement select = new SelectElement(driver.FindElement(By.Id("maincontent_semesterdrop")));
-			var options = select.Options;
-			while (i == 0)
+			if (login.CheckUrl(driver, Globals.AccountUrl))
 			{
-				foreach (IWebElement option in options)
+				string _season = GetSeason();
+				int i = 0;
+				SelectElement select = new SelectElement(driver.FindElement(By.Id("maincontent_semesterdrop")));
+				var options = select.Options;
+				while (i == 0)
 				{
-					if (_season == option.Text)
+					foreach (IWebElement option in options)
 					{
-						i++;
-						break;
+						if (_season == option.Text)
+						{
+							i++;
+							break;
+						}
+					}
+					if (i == 0)
+					{
+						Console.WriteLine("\nNot Found");
+						_season = GetSeason();
 					}
 				}
-				if (i == 0)
-				{
-					Console.WriteLine("\nNot Found");
-					_season = GetSeason();
-				}
+				select.SelectByText(_season);
 			}
-			select.SelectByText(_season);
+			else
+			{
+				Console.WriteLine("Refreshing..");
+				driver.Navigate().Refresh();
+			}
 		}
 
 		public void GetGrades(IWebDriver driver)
 		{
-			IWebElement table = driver.FindElement(By.Id("maincontent_GridView1"));
-			IList<IWebElement> trows = table.FindElements(By.TagName("tr"));
-			foreach(IWebElement trow in trows)
+			if (login.CheckUrl(driver, Globals.AccountUrl))
 			{
-				Console.WriteLine(trow.Text + "\n");
+				int i;
+				IWebElement table = driver.FindElement(By.Id("maincontent_GridView1"));
+				IList<IWebElement> trows = table.FindElements(By.TagName("span"));
+				Console.WriteLine("\n");
+				for (i = 3; i < trows.Count; i++)
+				{
+					if (trows[i].Text != trows[i - 1].Text)
+						Console.WriteLine(trows[i].Text);
+				}
+			}
+			else
+			{
+				Console.WriteLine("Refreshing..");
+				driver.Navigate().Refresh();
 			}
 		}
 	}

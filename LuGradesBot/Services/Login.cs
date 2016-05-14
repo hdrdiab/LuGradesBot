@@ -77,7 +77,7 @@ namespace LuGradesBot
 					StartPage(driver);
 				}
 			}
-			Console.WriteLine("Connected :)");
+			Console.WriteLine("Connected :)\n");
 		}
 
 		public void SubmitForm(IWebDriver driver)
@@ -118,7 +118,7 @@ namespace LuGradesBot
 					SubmitForm(driver);
 				}
 			}
-			Console.WriteLine("\nLogged in Successfully");
+			Console.WriteLine("\n"+driver.FindElement(By.Id("logincontent_ucLogin1_Label1")).Text+"logged in successfuly");
 		}
 	}
 }
