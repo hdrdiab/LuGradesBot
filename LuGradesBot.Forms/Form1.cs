@@ -15,7 +15,9 @@ namespace LuGradesBot.Forms
         string _username,_password;
         string homeUrl = "http://ulfg.ul.edu.lb/login.aspx";
         string gradesUrl = "http://ulfg.ul.edu.lb/account/gradeuser1.aspx";
-        WebBrowser browser;
+		string accountUrl = "http://ulfg.ul.edu.lb/account/account.aspx";
+
+		WebBrowser browser;
         public Form1()
         {
             InitializeComponent();
@@ -29,26 +31,51 @@ namespace LuGradesBot.Forms
         private void button1_Click(object sender, EventArgs e)
         {
             browser.Navigate(homeUrl);
+			Progress.Text = "Loading...";
             browser.DocumentCompleted += HomePageLoaded;
             _username = username.Text;
             _password = password.Text;
         }
 
         private void HomePageLoaded(object sender, WebBrowserDocumentCompletedEventArgs e)
-        {
-            browser.DocumentCompleted -= HomePageLoaded;
-            browser.DocumentCompleted += NavigateToGradesPage;
+        {			
+			browser.DocumentCompleted -= HomePageLoaded;
+            browser.DocumentCompleted += AuthenticatingUser;
             var document = browser.Document;
             var usernameField = document.GetElementById("maincontent_tbUser");
             var passwordField = document.GetElementById("maincontent_tbPassword");
             var submitButton = document.GetElementById("maincontent_Button1");
-            usernameField.InnerText = _username;
-            passwordField.InnerText = _password;
-            submitButton.InvokeMember("click");
-            progressBar.Value = 10;
-            Progress.Text = "Form Submitted";
+			//var errorMessage = document.GetElementById("maincontent_lblError");
+			if (_username != "" && _password != "")
+			{
+				usernameField.InnerText = _username;
+				passwordField.InnerText = _password;
+				submitButton.InvokeMember("click");
+				//progressBar.Value = 10;
+				Progress.Text = "Form Submitted";
+			}
+			else
+			{
+				Progress.Text = "Empty Username or Password !!";
+			}
         }
+		private void AuthenticatingUser(object sender, WebBrowserDocumentCompletedEventArgs e)
+		{
 
+			if (browser.Url.ToString() == homeUrl)
+			{
+				Progress.Text = "Wrong Username or Password";
+			}
+			else
+			{
+				browser.DocumentCompleted -= AuthenticatingUser;
+				browser.DocumentCompleted += NavigateToGradesPage;
+				browser.Navigate(accountUrl);
+				progressBar.Value = 10;
+				Progress.Text = "Logging in..";
+
+			}
+		}
         private void NavigateToGradesPage(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
             browser.DocumentCompleted -= NavigateToGradesPage;
