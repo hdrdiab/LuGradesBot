@@ -10,7 +10,7 @@ namespace LuGradesBot.Forms
 		private string homeUrl = "http://ulfg.ul.edu.lb/login.aspx";
 		private string gradesUrl = "http://ulfg.ul.edu.lb/account/gradeuser1.aspx";
 		private string accountUrl = "http://ulfg.ul.edu.lb/account/account.aspx";
-
+		private static Timer aTimer;
 		private WebBrowser browser;
 
 		public Form1()
@@ -42,6 +42,7 @@ namespace LuGradesBot.Forms
 			comboBox2.DisplayMember = "season";
 			comboBox2.ValueMember = "Id";
 			comboBox2.DropDownStyle = ComboBoxStyle.DropDownList;
+			button2.Visible = false;
 		}
 
 		private void button1_Click(object sender, EventArgs e)
@@ -51,11 +52,22 @@ namespace LuGradesBot.Forms
 			if (_username != "" && _password != "")
 			{
 				browser.Navigate(homeUrl);
+
+				//Serves as Reset button also in case pressed while the app is running
+				fullNameLabel.ResetText();
+				button2.Visible = false;
+				label4.ResetText();
+				gradesListView.Items.Clear();
 				progressBar.Value = 0 ;
-				Progress.Text = "Loading...";
+				browser.DocumentCompleted -= PrintGrades;
+
 				browser.DocumentCompleted += HomePageLoaded;
 				_academicyear = comboBox1.SelectedValue.ToString();
 				_season = comboBox2.SelectedValue.ToString();
+				Progress.Text = "Loading...";
+				
+				//to avoid pressing while loading the app
+				button1.Visible = false;
 			}
 			else
 			{
@@ -101,6 +113,10 @@ namespace LuGradesBot.Forms
 			browser.DocumentCompleted -= NavigateToGradesPage;
 			browser.DocumentCompleted += SelectYearDropDown;
 			browser.Navigate(gradesUrl);
+			aTimer = new Timer();
+			aTimer.Tick += new EventHandler(RefreshPage);
+			aTimer.Interval = 60000;
+			aTimer.Start();
 			fullNameLabel.Text = "Welcome " + browser.Document.GetElementById("logincontent_ucLogin1_Label1").InnerText;
 			progressBar.Value = 30;
 			Progress.Text = "Navigating to Grades Page";
@@ -118,10 +134,6 @@ namespace LuGradesBot.Forms
 			Progress.Text = "Selecting Year";
 		}
 
-		private void fullNameLabel_Click(object sender, EventArgs e)
-		{
-		}
-
 		private void SelectSeasonDropDown(object sender, WebBrowserDocumentCompletedEventArgs e)
 		{
 			browser.DocumentCompleted -= SelectSeasonDropDown;
@@ -134,12 +146,23 @@ namespace LuGradesBot.Forms
 			Progress.Text = "Selecting Season";
 		}
 
+		private void button2_Click(object sender, EventArgs e)
+		{
+			aTimer.Stop();
+			button2.Visible = false;
+			label4.ResetText();
+		}
+
 		private void PrintGrades(object sender, WebBrowserDocumentCompletedEventArgs e)
 		{
 			progressBar.Value = 100;
-			Progress.Text = "Successfull";
+            Progress.Text = "Successfull";
+			label4.Text = "The Grades will refresh every 60 sec ...";
+			button2.Visible = true;
+			button1.Visible = true;
 			var document = browser.Document;
 			GetGrades();
+			
 		}
 
 		public void GetGrades()
@@ -191,6 +214,14 @@ namespace LuGradesBot.Forms
 			{
 				Progress.Text = "No Grades Available";
 			}
+		}
+		private void RefreshPage(object sender, EventArgs e)
+		{
+			browser.Navigate(gradesUrl);
+			gradesListView.Items.Clear();
+			button2.Visible = false;
+			browser.DocumentCompleted -= PrintGrades;
+			browser.DocumentCompleted += SelectYearDropDown;
 		}
 	}
 }
