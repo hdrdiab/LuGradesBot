@@ -45,6 +45,7 @@ namespace LuGradesBot.Forms
 			comboBox2.ValueMember = "Id";
 			comboBox2.DropDownStyle = ComboBoxStyle.DropDownList;
 			button2.Visible = false;
+			password.PasswordChar = '●';
 		}
 
 		private void button1_Click(object sender, EventArgs e)

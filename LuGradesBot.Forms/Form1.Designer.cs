@@ -183,7 +183,7 @@
 			this.Controls.Add(this.username);
 			this.Controls.Add(this.button1);
 			this.Name = "Form1";
-			this.Text = "Form1";
+			this.Text = "LuGradesBot";
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
