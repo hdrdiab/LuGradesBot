@@ -150,7 +150,7 @@
 			this.label4.AutoSize = true;
 			this.label4.Location = new System.Drawing.Point(355, 352);
 			this.label4.Name = "label4";
-			this.label4.Size = new System.Drawing.Size(35, 13);
+			this.label4.Size = new System.Drawing.Size(0, 13);
 			this.label4.TabIndex = 11;
 			// 
 			// button2

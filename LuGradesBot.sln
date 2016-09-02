@@ -16,6 +16,8 @@ EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		LuGradesBot.Client\LuGradesBot.Client\LuGradesBot.Client.projitems*{1a67d279-8812-4391-9c6f-08da3cd9e67f}*SharedItemsImports = 13
+		LuGradesBot.Client\LuGradesBot.Client\LuGradesBot.Client.projitems*{aaf89de9-2ba4-473a-976c-3deeaa5e87ef}*SharedItemsImports = 4
+		LuGradesBot.Client\LuGradesBot.Client\LuGradesBot.Client.projitems*{e3512413-651a-47f3-a7fc-76f36d86fb40}*SharedItemsImports = 4
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Ad-Hoc|Any CPU = Ad-Hoc|Any CPU

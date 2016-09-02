@@ -1,4 +1,5 @@
 ﻿using LuGradesBot.Forms.Models;
+using mshtml;
 using System;
 using System.Windows.Forms;
 
@@ -12,6 +13,7 @@ namespace LuGradesBot.Forms
 		private string accountUrl = "http://ulfg.ul.edu.lb/account/account.aspx";
 		private static Timer aTimer;
 		private WebBrowser browser;
+		private int counter = 0;
 
 		public Form1()
 		{
@@ -54,6 +56,8 @@ namespace LuGradesBot.Forms
 				browser.Navigate(homeUrl);
 
 				//Serves as Reset button also in case pressed while the app is running
+				if (aTimer !=null)
+					aTimer.Dispose();
 				fullNameLabel.ResetText();
 				button2.Visible = false;
 				label4.ResetText();
@@ -61,7 +65,9 @@ namespace LuGradesBot.Forms
 				progressBar.Value = 0 ;
 				browser.DocumentCompleted -= PrintGrades;
 
-				browser.DocumentCompleted += HomePageLoaded;
+				browser.DocumentCompleted -= AuthenticatingUser;
+				
+			    browser.DocumentCompleted += HomePageLoaded;
 				_academicyear = comboBox1.SelectedValue.ToString();
 				_season = comboBox2.SelectedValue.ToString();
 				Progress.Text = "Loading...";
@@ -96,6 +102,7 @@ namespace LuGradesBot.Forms
 		{
 			if (browser.Url.ToString() == homeUrl)
 			{
+				button1.Visible = true;
 				Progress.Text = "Wrong Username or Password";
 			}
 			else
@@ -124,14 +131,50 @@ namespace LuGradesBot.Forms
 
 		private void SelectYearDropDown(object sender, WebBrowserDocumentCompletedEventArgs e)
 		{
-			browser.DocumentCompleted -= SelectYearDropDown;
-			browser.DocumentCompleted += SelectSeasonDropDown;
-			var document = browser.Document;
-			var dropdown = document.GetElementById("maincontent_academicdrop");
-			dropdown.SetAttribute("value", _academicyear);
-			dropdown.InvokeMember("onchange");
-			progressBar.Value = 50;
-			Progress.Text = "Selecting Year";
+			if (browser.Url.ToString() == gradesUrl)
+			{
+				browser.DocumentCompleted -= SelectYearDropDown;
+				browser.DocumentCompleted += SelectSeasonDropDown;
+				var document = browser.Document;
+				var dropdown = document.GetElementById("maincontent_academicdrop");
+				dropdown.SetAttribute("value", _academicyear);
+				dropdown.InvokeMember("onchange");
+				progressBar.Value = 50;
+				Progress.Text = "Selecting Year";
+			}
+			else
+			{
+				if (browser.Url.ToString() == accountUrl)
+				{
+					browser.Navigate(gradesUrl);
+					aTimer.Start();
+				}
+
+
+				else
+				{
+					counter++;
+					aTimer.Stop();
+					Progress.Text = "Filling Evaluation no." + counter.ToString();
+					browser.DocumentCompleted -= SelectYearDropDown;
+					browser.DocumentCompleted += SelectYearDropDown;
+					var document = browser.Document;
+					HtmlElement head = document.GetElementsByTagName("head")[0];
+					HtmlElement scriptEl = document.CreateElement("script");
+					IHTMLScriptElement element = (IHTMLScriptElement)scriptEl.DomElement;
+					element.text =
+						"function fillEvaluation(){"
+						+ "var elements = document.getElementsByTagName('input');"
+						+ "var i = 6;"
+						+ "var j = elements.length - 1;"
+						+ "while (i < elements.length)"
+						+ "{elements[i].checked = true;"
+						+ "i = i + 5;}"
+						+ "elements[j].click(); }";
+					head.AppendChild(scriptEl);
+					document.InvokeScript("fillEvaluation");
+				}
+			}
 		}
 
 		private void SelectSeasonDropDown(object sender, WebBrowserDocumentCompletedEventArgs e)
@@ -148,7 +191,7 @@ namespace LuGradesBot.Forms
 
 		private void button2_Click(object sender, EventArgs e)
 		{
-			aTimer.Stop();
+			aTimer.Dispose();
 			button2.Visible = false;
 			label4.ResetText();
 		}
@@ -220,6 +263,7 @@ namespace LuGradesBot.Forms
 			browser.Navigate(gradesUrl);
 			gradesListView.Items.Clear();
 			button2.Visible = false;
+			button1.Visible = false;
 			browser.DocumentCompleted -= PrintGrades;
 			browser.DocumentCompleted += SelectYearDropDown;
 		}
