@@ -87,6 +87,8 @@ namespace LuGradesBot
 			string _password = ReadPassword();
 			try
 			{
+				driver.FindElement(By.Id("maincontent_tbUser")).Clear();
+				driver.FindElement(By.Id("maincontent_tbPassword")).Clear();
 				IWebElement username = driver.FindElement(By.Id("maincontent_tbUser"));
 				IWebElement password = driver.FindElement(By.Id("maincontent_tbPassword"));
 				username.SendKeys(_username);
