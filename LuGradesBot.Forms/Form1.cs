@@ -11,7 +11,7 @@ namespace LuGradesBot.Forms
 		private string homeUrl = "http://ulfg.ul.edu.lb/login.aspx";
 		private string gradesUrl = "http://ulfg.ul.edu.lb/account/gradeuser1.aspx";
 		private string accountUrl = "http://ulfg.ul.edu.lb/account/account.aspx";
-		private static Timer aTimer;
+		private static Timer aTimer,bTimer;
 		private WebBrowser browser;
 		private int counter = 0;
 
@@ -59,6 +59,8 @@ namespace LuGradesBot.Forms
 				//Serves as Reset button also in case pressed while the app is running
 				if (aTimer !=null)
 					aTimer.Dispose();
+				if (bTimer != null)
+					bTimer.Dispose();
 				fullNameLabel.ResetText();
 				button2.Visible = false;
 				label4.ResetText();
@@ -67,8 +69,9 @@ namespace LuGradesBot.Forms
 				browser.DocumentCompleted -= PrintGrades;
 
 				browser.DocumentCompleted -= AuthenticatingUser;
-				
-			    browser.DocumentCompleted += HomePageLoaded;
+				browser.DocumentCompleted -= HomePageLoaded;
+
+				browser.DocumentCompleted += HomePageLoaded;
 				_academicyear = comboBox1.SelectedValue.ToString();
 				_season = comboBox2.SelectedValue.ToString();
 				Progress.Text = "Loading...";
@@ -84,19 +87,30 @@ namespace LuGradesBot.Forms
 
 		private void HomePageLoaded(object sender, WebBrowserDocumentCompletedEventArgs e)
 		{
-			browser.DocumentCompleted -= HomePageLoaded;
-			browser.DocumentCompleted += AuthenticatingUser;
 			var document = browser.Document;
-			var usernameField = document.GetElementById("maincontent_tbUser");
-			var passwordField = document.GetElementById("maincontent_tbPassword");
-			var submitButton = document.GetElementById("maincontent_Button1");
-			//var errorMessage = document.GetElementById("maincontent_lblError");
+			bTimer = new Timer();
+			bTimer.Tick += new EventHandler(button1_Click);
+			bTimer.Interval = 20000;
+			if (document.Url.ToString() != homeUrl)
+			{
+				bTimer.Start();
+				Progress.Text = "Probelm Connecting Retrying...";
+			}
+			else
+			{
+				bTimer.Stop();
+				browser.DocumentCompleted -= HomePageLoaded;
+				browser.DocumentCompleted += AuthenticatingUser;
+				var usernameField = document.GetElementById("maincontent_tbUser");
+				var passwordField = document.GetElementById("maincontent_tbPassword");
+				var submitButton = document.GetElementById("maincontent_Button1");
+				//var errorMessage = document.GetElementById("maincontent_lblError");
 				usernameField.InnerText = _username;
 				passwordField.InnerText = _password;
 				submitButton.InvokeMember("click");
 				progressBar.Value = 0;
 				Progress.Text = "Form Submitted";
-		
+			}
 		}
 
 		private void AuthenticatingUser(object sender, WebBrowserDocumentCompletedEventArgs e)
@@ -118,16 +132,24 @@ namespace LuGradesBot.Forms
 
 		private void NavigateToGradesPage(object sender, WebBrowserDocumentCompletedEventArgs e)
 		{
-			browser.DocumentCompleted -= NavigateToGradesPage;
-			browser.DocumentCompleted += SelectYearDropDown;
-			browser.Navigate(gradesUrl);
-			aTimer = new Timer();
-			aTimer.Tick += new EventHandler(RefreshPage);
-			aTimer.Interval = 60000;
-			aTimer.Start();
-			fullNameLabel.Text = "Welcome " + browser.Document.GetElementById("logincontent_ucLogin1_Label1").InnerText;
-			progressBar.Value = 30;
-			Progress.Text = "Navigating to Grades Page";
+			if (browser.Document.Url.ToString() != accountUrl)
+			{
+				bTimer.Start();
+				Progress.Text = "Problem Connecting retrying...";
+			}
+			else
+			{
+				bTimer.Stop();
+				browser.DocumentCompleted -= NavigateToGradesPage;
+				browser.DocumentCompleted += SelectYearDropDown;
+				browser.Navigate(gradesUrl);
+				aTimer = new Timer();
+				aTimer.Tick += new EventHandler(RefreshPage);
+				aTimer.Interval = 60000;
+				fullNameLabel.Text = "Welcome " + browser.Document.GetElementById("logincontent_ucLogin1_Label1").InnerText;
+				progressBar.Value = 30;
+				Progress.Text = "Navigating to Grades Page";
+			}
 		}
 
 		private void SelectYearDropDown(object sender, WebBrowserDocumentCompletedEventArgs e)
@@ -140,6 +162,8 @@ namespace LuGradesBot.Forms
 				var dropdown = document.GetElementById("maincontent_academicdrop");
 				dropdown.SetAttribute("value", _academicyear);
 				dropdown.InvokeMember("onchange");
+				aTimer.Stop();
+				bTimer.Stop();
 				progressBar.Value = 50;
 				Progress.Text = "Selecting Year";
 			}
@@ -149,31 +173,42 @@ namespace LuGradesBot.Forms
 				{
 					browser.Navigate(gradesUrl);
 					aTimer.Start();
+					bTimer.Stop();
 				}
-
 
 				else
 				{
-					counter++;
-					aTimer.Stop();
-					Progress.Text = "Filling Evaluation no." + counter.ToString();
-					browser.DocumentCompleted -= SelectYearDropDown;
-					browser.DocumentCompleted += SelectYearDropDown;
-					var document = browser.Document;
-					HtmlElement head = document.GetElementsByTagName("head")[0];
-					HtmlElement scriptEl = document.CreateElement("script");
-					IHTMLScriptElement element = (IHTMLScriptElement)scriptEl.DomElement;
-					element.text =
-						"function fillEvaluation(){"
-						+ "var elements = document.getElementsByTagName('input');"
-						+ "var i = 6;"
-						+ "var j = elements.length - 1;"
-						+ "while (i < elements.length)"
-						+ "{elements[i].checked = true;"
-						+ "i = i + 5;}"
-						+ "elements[j].click(); }";
-					head.AppendChild(scriptEl);
-					document.InvokeScript("fillEvaluation");
+					HtmlElement telement = browser.Document.GetElementsByTagName("input")[0];
+					if (telement != null)
+					{
+						counter++;
+						aTimer.Stop();
+						bTimer.Stop();
+						Progress.Text = "Filling Evaluation no." + counter.ToString();
+						browser.DocumentCompleted -= SelectYearDropDown;
+						browser.DocumentCompleted += SelectYearDropDown;
+						var document = browser.Document;
+						HtmlElement head = document.GetElementsByTagName("head")[0];
+						HtmlElement scriptEl = document.CreateElement("script");
+						IHTMLScriptElement element = (IHTMLScriptElement)scriptEl.DomElement;
+						element.text =
+							"function fillEvaluation(){"
+							+ "var elements = document.getElementsByTagName('input');"
+							+ "var i = 6;"
+							+ "var j = elements.length - 1;"
+							+ "while (i < elements.length)"
+							+ "{elements[i].checked = true;"
+							+ "i = i + 5;}"
+							+ "elements[j].click(); }";
+						head.AppendChild(scriptEl);
+						document.InvokeScript("fillEvaluation");
+					}
+					else
+					{
+						bTimer.Start();
+						Progress.Text = "Porblem Connecting Retrying";
+
+					}
 				}
 			}
 		}
@@ -202,6 +237,7 @@ namespace LuGradesBot.Forms
 			progressBar.Value = 100;
             Progress.Text = "Successfull";
 			label4.Text = "The Grades will refresh every 60 sec ...";
+			aTimer.Start();
 			button2.Visible = true;
 			button1.Visible = true;
 			var document = browser.Document;
