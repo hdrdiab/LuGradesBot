@@ -71,10 +71,10 @@
 			// 
 			// label1
 			// 
-			this.label1.Font = new System.Drawing.Font("Microsoft MHei", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.label1.Location = new System.Drawing.Point(55, 39);
 			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(179, 71);
+			this.label1.Size = new System.Drawing.Size(191, 71);
 			this.label1.TabIndex = 0;
 			this.label1.Text = "LuGradesBot";
 			// 
@@ -100,11 +100,12 @@
 			// Progress
 			// 
 			this.Progress.AutoSize = true;
-			this.Progress.Location = new System.Drawing.Point(114, 352);
+			this.Progress.Location = new System.Drawing.Point(23, 352);
 			this.Progress.Name = "Progress";
 			this.Progress.Size = new System.Drawing.Size(48, 13);
 			this.Progress.TabIndex = 5;
 			this.Progress.Text = "Progress";
+			this.Progress.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
 			// 
 			// progressBar
 			// 

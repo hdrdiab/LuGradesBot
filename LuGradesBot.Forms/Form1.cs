@@ -69,6 +69,7 @@ namespace LuGradesBot.Forms
 				browser.DocumentCompleted -= PrintGrades;
 
 				browser.DocumentCompleted -= AuthenticatingUser;
+				//in case bTimer started
 				browser.DocumentCompleted -= HomePageLoaded;
 
 				browser.DocumentCompleted += HomePageLoaded;
@@ -235,7 +236,7 @@ namespace LuGradesBot.Forms
 		private void PrintGrades(object sender, WebBrowserDocumentCompletedEventArgs e)
 		{
 			progressBar.Value = 100;
-            Progress.Text = "Successfull";
+            Progress.Text = "Successfully Loaded";
 			label4.Text = "The Grades will refresh every 60 sec ...";
 			aTimer.Start();
 			button2.Visible = true;
