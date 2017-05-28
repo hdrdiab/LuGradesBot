@@ -8,9 +8,9 @@ namespace LuGradesBot.Forms
 	public partial class Form1 : Form
 	{
 		private string _username, _password, _academicyear, _season;
-		private string homeUrl = "http://ulfg.ul.edu.lb/login.aspx";
-		private string gradesUrl = "http://ulfg.ul.edu.lb/account/gradeuser1.aspx";
-		private string accountUrl = "http://ulfg.ul.edu.lb/account/account.aspx";
+		private string homeUrl = "http://old.ulfg.ul.edu.lb/login.aspx";
+		private string gradesUrl = "http://old.ulfg.ul.edu.lb/account/gradeuser1.aspx";
+		private string accountUrl = "http://old.ulfg.ul.edu.lb/account/account.aspx";
 		private static Timer aTimer,bTimer;
 		private WebBrowser browser;
 		private int counter = 0;
