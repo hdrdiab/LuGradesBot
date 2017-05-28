@@ -1,5 +1,5 @@
 # LuGradesBot
-##Automatical grades checker for the ULFG students  
+ 
 Found to be used by **ULFG** students **LuGradesBot** connects the student to the ulfg website and checks his grades every now and then for an update.
 
 **This application was created because the old ulfg website was bad.**
